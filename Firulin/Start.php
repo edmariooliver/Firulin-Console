@@ -28,6 +28,7 @@ function startCommand($command)
         
         case 'project':
             $command->createProject();
+            break;
 
         default:
             $command->messageError("Comando não encontrado!");
