@@ -27,9 +27,7 @@ class Command
             mkdir(__DIR__."/../app/Views", 0777, true);
             print $this->messageSucess("Projeto criado com sucesso!");
             return true;
-
         }else{
-            
             print $this->messageError("AVISO: diretório ocupado");
             return false;
         }
