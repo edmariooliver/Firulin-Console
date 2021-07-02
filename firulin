@@ -1,0 +1,8 @@
+#!/usr/bin/env php
+<?php
+
+error_reporting(E_ERROR | E_PARSE);
+
+require_once("Firulin/Start.php");
+
+startCommand($argv);
