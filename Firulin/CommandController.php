@@ -24,8 +24,6 @@ class CommandController extends Command
         }
     }
     
-
-
     /**
      * @param string @name
      * @return string
