@@ -32,5 +32,6 @@ function startCommand($command)
 
         default:
             $command->messageError("Comando não encontrado!");
+            break;
     }
 }
