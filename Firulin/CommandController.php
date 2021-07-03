@@ -30,13 +30,18 @@ class CommandController extends Command
      */
     public function createArchive($name)
     {
-        $archive = fopen($this->path."/".$name.".php", "x+");
-        if(!$archive){
-            return parent::messageError("Impossível criar o novo arquivo");
+        if(strlen($name) > 0){
+            $archive = fopen($this->path."/".$name.".php", "x+");
+            if(!$archive){
+                return parent::messageError("Impossível criar o novo arquivo");
+            }else{
+                fwrite($archive, "<?php \n  namespace App; \n class ".$this->nameArchive."\n { \n }");
+                fclose($archive);  
+                return parent::messageSucess("Sucesso!");
+            }  
         }else{
-            fwrite($archive, "<?php \n  namespace App; \n class ".$this->nameArchive."\n { \n }");
-            fclose($archive);  
-            return parent::messageSucess("Sucesso!");
-        }  
+            print($this->messageError("Impossível criar o arquivo"));
+            print($this->messageSucess("Segue o comando abaixo:\nphp firulin controller:create [nome-do-arquivo]"));
+        }
     }
 }

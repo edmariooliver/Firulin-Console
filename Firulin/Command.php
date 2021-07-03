@@ -7,11 +7,31 @@ class Command
     protected $path = "/app";
     protected $line;
     protected $nameArchive;
+    protected $commands = ["model:create", "controller:create", "project:create"];
 
     public function __construct($line)
     {   
         $this->line = $line["action"];
         $this->nameArchive = $line["name"];
+    }
+
+    public function presents()
+    {
+        print "
+             _______     ___     ______    ___    ___     ___        ___    __    ___
+            /  ____/    /  /    /  ___/   /  /   /  /    /  /       /  /   /  \  /  /
+           /  /___     /  /    /  /      /  /   /  /    /  /       /  /   /    \/  / 
+          /  ____/    /  /    /  /      /  /   /  /    /  /       /  /   /  \     / 
+         /  /        /  /    /  /      /  /___/  /    /  /_____  /  /   /  / \___/
+        /__/        /__/    /__/      /_________/    /________/ /__/   /__/
+        \n" ;
+        print "\033[1;33mVersão 1.0\nAutor: Edmário Oliveira\033[0m\n";
+        print "\n";
+        print "\033[1;32mCOMANDOS:\033[0m\n";
+
+        foreach($this->commands as $command){
+            print "   ".$command."\n";
+        }
     }
 
     /**
@@ -48,7 +68,8 @@ class Command
      */
     public function messageError($msg)
     {
-        return "\033[1;31m".$msg."\033[0m\n";
+        $date = "[".date("h:m:s")."] ";
+        return "\033[1;31m".$date.$msg."\033[0m\n";
     }
 
     /**
@@ -57,7 +78,8 @@ class Command
      */
     public function messageSucess($msg)
     {
-        return "\033[1;32m".$msg."\033[0m\n";
+        $date = "[".date("h:m:s")."] ";
+        return "\033[1;32m".$date.$msg."\033[0m\n";
     }
 
     /**
@@ -82,6 +104,18 @@ class Command
      */
     public function start()
     {
-        //
+        switch ($this->line) {
+
+            case 'create':
+                print $this->createProject($this->nameArchive);
+                break;
+            default:
+                print($this->messageError("Comando não encontrado!"));
+                print($this->messageSucess("Segue os comandos abaixo:"));
+                foreach($this->commands as $command){
+                    print($command."\n");
+                }
+                break;
+        }
     }
 }
