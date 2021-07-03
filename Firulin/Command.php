@@ -6,24 +6,24 @@ class Command
 {
     protected $path = "/app";
     protected $line;
-    protected $nameArchive;
+    protected $nameFIle;
     protected $commands = ["model:create", "controller:create", "project:create"];
 
     public function __construct($line)
     {   
         $this->line = $line["action"];
-        $this->nameArchive = $line["name"];
+        $this->nameFile = $line["name"];
     }
 
     public function presents()
     {
         print "
-             _______     ___     ______    ___    ___     ___        ___    __    ___
-            /  ____/    /  /    /  ___/   /  /   /  /    /  /       /  /   /  \  /  /
-           /  /___     /  /    /  /      /  /   /  /    /  /       /  /   /    \/  / 
-          /  ____/    /  /    /  /      /  /   /  /    /  /       /  /   /  \     / 
-         /  /        /  /    /  /      /  /___/  /    /  /_____  /  /   /  / \___/
-        /__/        /__/    /__/      /_________/    /________/ /__/   /__/
+             _______  ___  ______  ___    ___   ___        ___  __    ___
+            /  ____/ /  / /  ___/ /  /   /  /  /  /       /  / /  \  /  /
+           /  /___  /  / /  /    /  /   /  /  /  /       /  / /    \/  / 
+          /  ____/ /  / /  /    /  /   /  /  /  /       /  / /  /\    / 
+         /  /     /  / /  /    /  /___/  /  /  /_____  /  / /  /  \__/
+        /__/     /__/ /__/    /_________/  /________/ /__/ /__/
         \n" ;
         print "\033[1;33mVersão 1.0\nAutor: Edmário Oliveira\033[0m\n";
         print "\n";
@@ -54,15 +54,6 @@ class Command
     }
 
     /**
-     * @param string @path
-     * @return
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    /**
      * @param string $msg
      * @return string
      */
@@ -86,17 +77,20 @@ class Command
      * @param string @name
      * @return string
      */
-    public function createArchive($name)
+    public function createFile($name)
     {
-        //
-    }
-    
-    /**
-     * 
-     */
-    protected function excpetion()
-    {
-        //
+        if(strlen($name) > 0){
+            $file = fopen($this->path."/".$name.".php", "x+");
+            if(!$file){
+                return $this->messageError("Impossível criar o novo arquivo");
+            }else{
+                fclose($file);
+                return $this->messageSucess("Sucesso!");
+            }  
+        }else{
+            print($this->messageError("Impossível criar o arquivo"));
+            print($this->messageSucess("Segue o comando abaixo:\nCOMANDO: php firulin [comando] [nome-do-arquivo]"));
+        }
     }
   
     /**
@@ -107,7 +101,7 @@ class Command
         switch ($this->line) {
 
             case 'create':
-                print $this->createProject($this->nameArchive);
+                print $this->createProject($this->nameFile);
                 break;
             default:
                 print($this->messageError("Comando não encontrado!"));
