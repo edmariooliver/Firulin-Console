@@ -34,8 +34,8 @@ function startCommand($command)
                 break;
             }
         }   
-        else{
-            $command = new Command($command);
-            $command->presents();
-        }
+    else{
+        $command = new Command($command);
+        $command->presents();
+    }
 }
