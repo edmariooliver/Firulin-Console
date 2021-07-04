@@ -8,9 +8,11 @@ Interface de linha de comando feito em PHP, para me auxiliar em projetos usando 
 
 ```sh
 git clone https://github.com/edmariooliver/Firulin-Console
-
+```
+```sh
 cd Firulin-Console
 ```
+Ou você pode copiar os arquivos do Firulin para dentro do seu projeto, e começar usar.
 
 ### _Comandos_
 
