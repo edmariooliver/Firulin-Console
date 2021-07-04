@@ -14,6 +14,11 @@ cd Firulin-Console
 
 ### _Comandos_
 
+- [x] Ver todas as informações do Firulin
+
+```sh
+    php firulin
+```
 - [x] Criar projeto
 
 ```sh
