@@ -1,8 +1,31 @@
 <?php
 
-namespace App\Models;
+namespace App\0;
 
-class NOME
+class 1
 {
     
+    //
+    public function create()
+    {
+
+    }
+
+    //
+    public function read()
+    {
+
+    }
+
+    //
+    public function update()
+    {
+
+    }
+
+    //
+    public function delete()
+    {
+
+    }
 }
