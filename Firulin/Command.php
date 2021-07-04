@@ -8,6 +8,8 @@ class Command
     protected $line;
     protected $nameFIle;
     protected $commands = ["model:create", "controller:create", "project:create"];
+    protected $pathsProject = ["Models", "Routes", "Controllers", "Views"];
+    protected $nameClass;
 
     public function __construct($line)
     {   
@@ -40,17 +42,31 @@ class Command
      */
     public function createProject()
     {
-        if(!is_dir(__DIR__."/../app/")){
-            mkdir(__DIR__."/../app/Controllers", 0777, true);
-            mkdir(__DIR__."/../app/Models", 0777, true);
-            mkdir(__DIR__."/../app/Routes", 0777, true);
-            mkdir(__DIR__."/../app/Views", 0777, true);
-            print $this->messageSucess("Projeto criado com sucesso!");
-            return true;
-        }else{
-            print $this->messageError("AVISO: diretório ocupado");
+        print $this->messageLoad("Criando app...");
+        if(is_dir(__DIR__."/../app/")){
+            print $this->messageSucess("O projeto já está criado!");
             return false;
         }
+        mkdir(__DIR__."/../app/");
+        if(!is_dir(__DIR__."/../app/")){
+            print $this->messageSucess("Ocorreu um erro ao criar o projeto!");
+            return false;
+        }
+        print $this->messageSucess("Ok!");
+        foreach($this->pathsProject as $path){
+            print $this->messageLoad("Criando ".$path."...");
+            mkdir(__DIR__."/../app/".$path, 0777, true);
+            print $this->messageSucess("Ok!");
+        }
+        print "\033[1;33mGerando htaccess\033[0m\n";
+        if(is_file(__DIR__."/../.htaccess")){
+            print $this->messageError("Ocorreu um erro ao gerar o htaccess");
+        }else{
+            $htaccess = fopen(__DIR__."/../.htaccess", "x+");
+            print $this->messageSucess("Ok!");
+            fclose($htaccess);
+        }
+        return true;
     }
 
     /**
@@ -61,6 +77,16 @@ class Command
     {
         $date = "[".date("h:m:s")."] ";
         return "\033[1;31m".$date.$msg."\033[0m\n";
+    }
+
+    /**
+     * @param string $msg
+     * @return string
+     */
+    public function messageLoad($msg)
+    {
+        $date = "[".date("h:m:s")."] ";
+        return "\033[1;33m".$date.$msg."\033[0m\n";
     }
 
     /**
@@ -80,11 +106,20 @@ class Command
     public function createFile($name)
     {
         if(strlen($name) > 0){
+
             $file = fopen($this->path."/".$name.".php", "x+");
             if(!$file){
                 return $this->messageError("Impossível criar o novo arquivo");
             }else{
+                $fileModel = __DIR__."/Modelos/modelo.txt";
+                $model = fopen($fileModel, "r");
+                $content = fread($model, filesize($fileModel));
+                $content = str_replace("0", $this->nameClass, $content);
+                $content = str_replace("1", $this->nameFile, $content);
+                $namespace = 'App\.'.$this->nameClass;
+                fwrite($file, $content);
                 fclose($file);
+                fclose($model);
                 return $this->messageSucess("Sucesso!");
             }  
         }else{
@@ -99,9 +134,8 @@ class Command
     public function start()
     {
         switch ($this->line) {
-
             case 'create':
-                print $this->createProject($this->nameFile);
+                $this->createProject($this->nameFile);
                 break;
             default:
                 print($this->messageError("Comando não encontrado!"));
