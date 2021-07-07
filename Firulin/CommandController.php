@@ -8,9 +8,7 @@ class CommandController extends Command
 {    
     protected $path = "app/Controllers";
     protected $nameClass = "Controllers";
-    /**
-     * 
-     */
+    
     public function start()
     {
         switch ($this->line) {

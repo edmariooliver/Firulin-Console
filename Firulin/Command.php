@@ -1,14 +1,46 @@
 <?php
 
-namespace Firulin;
+/**
+ *  Command class
+ */
+
+ namespace Firulin;
 
 class Command
 {
+    /**
+     * Class path name
+     * @var string 
+     */
     protected $path = "/app";
+    
+    /**
+     * @var string
+     */
     protected $line;
+
+    /**
+     * filename received by command
+     * @var string 
+     */
     protected $nameFIle;
+    
+    /**
+     * Firulin command list
+     * @var 
+     */
     protected $commands = ["model:create", "controller:create", "project:create"];
+    
+    /**
+     * List of internal folders in the project
+     * @var array 
+     */
     protected $pathsProject = ["Models", "Routes", "Controllers", "Views"];
+    
+    /**
+     * Project layer name
+     * @var string  
+     */
     protected $nameClass;
 
     public function __construct($line)
@@ -17,6 +49,10 @@ class Command
         $this->nameFile = $line["name"];
     }
 
+    /**
+     * Apresentando o Firulin no console
+     * @return bool
+     */
     public function presents()
     {
         print "
@@ -34,9 +70,11 @@ class Command
         foreach($this->commands as $command){
             print "   ".$command."\n";
         }
+        return true;
     }
 
     /**
+     * This function that creates the project
      * @param null
      * @return bool
      */
@@ -44,32 +82,33 @@ class Command
     {
         print $this->messageLoad("Criando app...");
         if(is_dir(__DIR__."/../app/")){
-            print $this->messageSucess("O projeto já está criado!");
+            print $this->messageSuccess("O projeto já está criado!");
             return false;
         }
         mkdir(__DIR__."/../app/");
         if(!is_dir(__DIR__."/../app/")){
-            print $this->messageSucess("Ocorreu um erro ao criar o projeto!");
+            print $this->messageSuccess("Ocorreu um erro ao criar o projeto!");
             return false;
         }
-        print $this->messageSucess("Ok!");
+        print $this->messageSuccess("Ok!");
         foreach($this->pathsProject as $path){
             print $this->messageLoad("Criando ".$path."...");
             mkdir(__DIR__."/../app/".$path, 0777, true);
-            print $this->messageSucess("Ok!");
+            print $this->messageSuccess("Ok!");
         }
         print "\033[1;33mGerando htaccess\033[0m\n";
         if(is_file(__DIR__."/../.htaccess")){
             print $this->messageError("Ocorreu um erro ao gerar o htaccess");
         }else{
             $htaccess = fopen(__DIR__."/../.htaccess", "x+");
-            print $this->messageSucess("Ok!");
+            print $this->messageSuccess("Ok!");
             fclose($htaccess);
         }
         return true;
     }
 
     /**
+     * Send message error in console
      * @param string $msg
      * @return string
      */
@@ -80,6 +119,7 @@ class Command
     }
 
     /**
+     * Send message load in console
      * @param string $msg
      * @return string
      */
@@ -90,10 +130,11 @@ class Command
     }
 
     /**
+     * Send message success in console
      * @param string @msg
      * @return string
      */
-    public function messageSucess($msg)
+    public function messageSuccess($msg)
     {
         $date = "[".date("h:m:s")."] ";
         return "\033[1;32m".$date.$msg."\033[0m\n";
@@ -107,29 +148,37 @@ class Command
     {
         if(strlen($name) > 0){
 
+            //Open new file or create new file
             $file = fopen($this->path."/".$name.".php", "x+");
+
             if(!$file){
                 return $this->messageError("Impossível criar o novo arquivo");
             }else{
+                //Open model
                 $fileModel = __DIR__."/Modelos/modelo.txt";
                 $model = fopen($fileModel, "r");
                 $content = fread($model, filesize($fileModel));
                 $content = str_replace("0", $this->nameClass, $content);
                 $content = str_replace("1", $this->nameFile, $content);
                 $namespace = 'App\.'.$this->nameClass;
+                
+                //Set model in new file
                 fwrite($file, $content);
+
+                //Close files
                 fclose($file);
                 fclose($model);
-                return $this->messageSucess("Sucesso!");
+
+                return $this->messageSuccess("Sucesso!");
             }  
         }else{
             print($this->messageError("Impossível criar o arquivo"));
-            print($this->messageSucess("Segue o comando abaixo:\nCOMANDO: php firulin [comando] [nome-do-arquivo]"));
+            print($this->messageSuccess("Segue o comando abaixo:\nCOMANDO: php firulin [comando] [nome-do-arquivo]"));
         }
     }
   
     /**
-     * 
+     * Init process 
      */
     public function start()
     {
@@ -139,7 +188,7 @@ class Command
                 break;
             default:
                 print($this->messageError("Comando não encontrado!"));
-                print($this->messageSucess("Segue os comandos abaixo:"));
+                print($this->messageSuccess("Segue os comandos abaixo:"));
                 foreach($this->commands as $command){
                     print($command."\n");
                 }

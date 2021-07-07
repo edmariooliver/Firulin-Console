@@ -1,5 +1,7 @@
 <?php
 
+//Control file
+
 require_once("CommandModel.php");
 require_once("CommandController.php");
 
