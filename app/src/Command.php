@@ -1,10 +1,11 @@
 <?php
 
-/**
+/** 
+ *  PHP version 8.0
  *  Command class
  */
 
- namespace Firulin;
+namespace App\src;
 
 class Command
 {
@@ -12,7 +13,7 @@ class Command
      * Class path name
      * @var string 
      */
-    protected $path = "/app";
+    protected $path = __DIR__."/../../project/";
     
     /**
      * @var string
@@ -27,7 +28,7 @@ class Command
     
     /**
      * Firulin command list
-     * @var 
+     * @var array
      */
     protected $commands = ["model:create", "controller:create", "project:create"];
     
@@ -35,7 +36,7 @@ class Command
      * List of internal folders in the project
      * @var array 
      */
-    protected $pathsProject = ["Models", "Routes", "Controllers", "Views"];
+    protected $foldersProject = ["Models", "Routes", "Controllers", "Views"];
     
     /**
      * Project layer name
@@ -55,20 +56,12 @@ class Command
      */
     public function presents()
     {
-        print "
-             _______  ___  ______  ___    ___   ___        ___  __    ___
-            /  ____/ /  / /  ___/ /  /   /  /  /  /       /  / /  \  /  /
-           /  /___  /  / /  /    /  /   /  /  /  /       /  / /    \/  / 
-          /  ____/ /  / /  /    /  /   /  /  /  /       /  / /  /\    / 
-         /  /     /  / /  /    /  /___/  /  /  /_____  /  / /  /  \__/
-        /__/     /__/ /__/    /_________/  /________/ /__/ /__/
-        \n" ;
         print "\033[1;33mVersão 1.0\nAutor: Edmário Oliveira\033[0m\n";
         print "\n";
         print "\033[1;32mCOMANDOS:\033[0m\n";
 
         foreach($this->commands as $command){
-            print "   ".$command."\n";
+            print " ".$command."\n";
         }
         return true;
     }
@@ -80,30 +73,38 @@ class Command
      */
     public function createProject()
     {
-        print $this->messageLoad("Criando app...");
-        if(is_dir(__DIR__."/../app/")){
+        if(is_dir($this->path)){
             print $this->messageSuccess("O projeto já está criado!");
             return false;
         }
-        mkdir(__DIR__."/../app/");
-        if(!is_dir(__DIR__."/../app/")){
+    
+        mkdir($this->path);
+        
+        if(!is_dir($this->path)){
             print $this->messageSuccess("Ocorreu um erro ao criar o projeto!");
             return false;
         }
-        print $this->messageSuccess("Ok!");
-        foreach($this->pathsProject as $path){
+
+        foreach($this->foldersProject as $path){
             print $this->messageLoad("Criando ".$path."...");
-            mkdir(__DIR__."/../app/".$path, 0777, true);
+            mkdir($this->path."/".$path, 0777, true);
             print $this->messageSuccess("Ok!");
         }
-        print "\033[1;33mGerando htaccess\033[0m\n";
-        if(is_file(__DIR__."/../.htaccess")){
+
+        if(is_file($this->path."htaccess")){
             print $this->messageError("Ocorreu um erro ao gerar o htaccess");
         }else{
-            $htaccess = fopen(__DIR__."/../.htaccess", "x+");
-            print $this->messageSuccess("Ok!");
+            $htaccess = fopen($this->path."/.htaccess", "x+");
             fclose($htaccess);
         }
+
+        if(is_file($this->path."index.php")){
+            print $this->messageError("Ocorreu um erro ao gerar o htaccess");
+        }else{
+            $htaccess = fopen($this->path."/index.php", "x+");
+            fclose($htaccess);
+        }
+
         return true;
     }
 
@@ -149,13 +150,13 @@ class Command
         if(strlen($name) > 0){
 
             //Open new file or create new file
-            $file = fopen($this->path."/".$name.".php", "x+");
+            $file = fopen($this->path.$this->nameClass."/".$name.".php", "x+");
 
             if(!$file){
                 return $this->messageError("Impossível criar o novo arquivo");
             }else{
                 //Open model
-                $fileModel = __DIR__."/Modelos/modelo.txt";
+                $fileModel = __DIR__."/../assets/modelo.txt";
                 $model = fopen($fileModel, "r");
                 $content = fread($model, filesize($fileModel));
                 $content = str_replace("0", $this->nameClass, $content);

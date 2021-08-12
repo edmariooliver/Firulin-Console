@@ -1,13 +1,11 @@
 <?php
 
 //Control file
+require_once "vendor/autoload.php";
 
-require_once("CommandModel.php");
-require_once("CommandController.php");
-
-use Firulin\CommandModel;
-use Firulin\CommandController;
-use Firulin\Command;
+use App\src\CommandModel;
+use App\src\CommandController;
+use App\src\Command;
 
 function startCommand($command)
 {

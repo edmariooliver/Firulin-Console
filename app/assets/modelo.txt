@@ -4,15 +4,14 @@ namespace App\0;
 
 class 1
 {
-    
     //
-    public function create()
+    public function read()
     {
 
     }
 
     //
-    public function read()
+    public function delete()
     {
 
     }
@@ -24,7 +23,7 @@ class 1
     }
 
     //
-    public function delete()
+    public function create()
     {
 
     }

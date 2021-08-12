@@ -1,12 +1,13 @@
 <?php
 
-namespace Firulin;
-require_once 'Command.php';
-use Firulin\Command;
+namespace App\src;
+
+require_once "vendor/autoload.php";
+use App\src;
 
 class CommandModel extends Command
 {    
-    protected $path = "app/Models";
+    protected $path = __DIR__."/../../project/";
     protected $nameClass= "Models";
     
     public function start()
