@@ -1,5 +1,5 @@
 # _Firulin Console_
-
+* ABANDONADO *
 @marrios 
 
 Interface de linha de comando feito em PHP, para me auxiliar em projetos usando o padrão MVC
